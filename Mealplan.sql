@@ -1,13 +1,13 @@
-create database IF NOT EXISTS mealplan; 
+#create database mealplan; 
 use mealplan; 
 
-create table IF NOT EXISTS useraccounts(
+create table useraccounts(
     useraccnum int auto_increment not null,
     username varchar(50) not null, 
     firstname varchar(50) not null, 
     lastname varchar(50) not null, 
-    dob varchar(30) not null, 
-    age int(10) null, 
+    dob date not null, 
+    age int(10) not null, 
     email varchar(50) not null,  
     phone varchar(30) not null,
     gender varchar(10) not null,  
@@ -16,26 +16,26 @@ create table IF NOT EXISTS useraccounts(
     primary key (useraccnum, username) 
 
 ); 
-ALTER TABLE useraccounts CHANGE COLUMN age  age int(10) NULL;
-ALTER TABLE useraccounts CHANGE COLUMN dob  dob varchar(30);
-ALTER TABLE useraccounts DROP dateofbirth;
 
-create table IF NOT EXISTS profiles( 
-    useraccnum int auto_increment not null,
-    username varchar(50) not null, 
-    bloodtype varchar(50) not null, 
+create table profiles( 
+    useraccnum int not null,
+    username varchar (50) not null, 
+    bloodtype varchar (50) not null, 
     eatertype enum ("meat-eater","vegetarian", "other"),
     primaryfoodchoice enum ("fruits", "vegetables", "dairy", "meats", "grains"),  
     secondaryfoodchoice enum ("fruits", "vegetables", "dairy", "meats", "grains"), 
     tertiaryfoodchoice enum ("fruits", "vegetables", "dairy", "meats", "grains"), 
-    primary key (useraccnum, username),
-   CONSTRAINT accnum FOREIGN KEY (useraccnum) REFERENCES useraccounts(useraccnum) on delete cascade,
-   CONSTRAINT accname FOREIGN KEY (username) REFERENCES useraccounts(username) on delete cascade
-    
+    primary key (useraccnum, username), 
+    foreign key (useraccnum) references useraccounts (useraccnum) on delete cascade,
+    foreign key(username) references useraccounts (username) on delete cascade,
 
-);  
+    primary key (useraccnum), 
+    foreign key (useraccnum) references useraccounts (useraccnum) on delete cascade,
+    foreign key(username) references useraccounts (username) on delete cascade
+
+    );  
     
-create table IF NOT EXISTS recipes( 
+create table recipes( 
     recipenum int auto_increment not null, 
     recipename varchar(200) not null,  
     recipecreatedate date not null,  
@@ -47,7 +47,7 @@ create table instructions(
     recipenum int not null, 
     recipename varchar (200) not null, 
     instructionnum int not null, 
-    instructions varchar (500) not null
+    instructions varchar (500) not null, 
     
 ); 
 create table mealplan(); 
@@ -77,7 +77,6 @@ create table ingredients(
 
     foreign key()
 );
-
 
 
 
@@ -10128,13 +10127,6 @@ INSERT INTO `useraccounts` (`useraccnum`,`username`,`firstname`,`lastname`,`dob`
 INSERT INTO `useraccounts` (`useraccnum`,`username`,`firstname`,`lastname`,`dob`,`email`,`phone`,`gender`,`city`,`country`) VALUES (10000,"N1U5U7","Sean","David","01/30/98","molestie@dignissim.com","1-271-468-9299","Male","Fredericton","United States Minor Outlying Islands");
 
 
-/*Queries*/ 
-
-SELECT DATE_FORMAT(dob, '%m-%d-%y') from useraccounts;
-
-ALTER TABLE useraccounts ADD newcol dateofbirth;
-
-SELECT CAST(dob as DATE) FROM useraccounts;
 
 
 

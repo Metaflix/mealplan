@@ -7,8 +7,13 @@ This file creates your application.
 
 from app import app
 from flask import render_template, request, redirect, url_for
-
+from flask.ext.mysqldb import MySQL
 import smtplib
+
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'metaflix'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'c9'
 
 ###
 # Routing for your application.
@@ -25,7 +30,7 @@ def about():
     """Render the website's about page."""
     return render_template('about.html', name="Mary Jane")
     
-@app.route('/contact', methods=['GET', 'POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def contact():
     form = ContactForm()
     if request.method == 'POST':
