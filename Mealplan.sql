@@ -7,7 +7,6 @@ create table useraccounts(
     firstname varchar(50) not null, 
     lastname varchar(50) not null, 
     dob date not null, 
-<<<<<<< HEAD
     age int(10) not null, 
     email varchar(50) not null,  
     phone varchar(30) not null,
@@ -15,7 +14,7 @@ create table useraccounts(
     city varchar(100) not null,
     country varchar(30) not null, 
     primary key (useraccnum) 
-=======
+
     age int (10) not null, 
     email varchar (50) not null,  
     phone varchar (30) not null,
@@ -23,7 +22,7 @@ create table useraccounts(
     city varchar (100) not null,
     country varchar (30) not null, 
     primary key (useraccnum, username) 
->>>>>>> 7404b4337452b26278cb1a527cc3f9cccb672c0d
+
 ); 
 
 create table profiles( 
@@ -34,22 +33,21 @@ create table profiles(
     primaryfoodchoice enum ("fruits", "vegetables", "dairy", "meats", "grains"),  
     secondaryfoodchoice enum ("fruits", "vegetables", "dairy", "meats", "grains"), 
     tertiaryfoodchoice enum ("fruits", "vegetables", "dairy", "meats", "grains"), 
-<<<<<<< HEAD
     primary key (useraccnum, username), 
     foreign key (useraccnum) references useraccounts (useraccnum) on delete cascade,
     foreign key(username) references useraccounts (username) on delete cascade,
-=======
+
     primary key (useraccnum), 
     #foreign key (useraccnum) references useraccounts (useraccnum) on delete cascade,
     #foreign key(username) references useraccounts (username) on delete cascade
->>>>>>> 7404b4337452b26278cb1a527cc3f9cccb672c0d
+
     );  
     
 create table recipes( 
     recipenum int auto_increment not null, 
     recipename varchar(200) not null,  
     recipecreatedate date not null,  
-    recipetype enum
+    #recipetype enum,
     primary key (recipenum)
 );   
 
@@ -79,10 +77,89 @@ create table ingredients(
     ingredientname varchar (50) not null,  
     ingredienttype enum ("preservative", "sweetners", "colour-additive", "spices-flavour", "flavour-enhancers", "nutrients", "emulsfier", "thickeners")
     ingredientquantity varchar (50) not null,  
-    primary key (recipenum, recipename, ingredientname) 
+
+    recipenum int not null,
+    recipename varchar (200) not null,
+
+    primary key (recipenum, recipename, ingredientname), 
+
     foreign key()
 );
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*Stored Proceedures*/
+DELIMITER //
+CREATE PROCEDURE GetAllRecipes()
+BEGIN
+SELECT recipenum, recipename, recipetype FROM recipes;
+END //
+DELIMITER ;
+
+
+CALL GetAllRecipes();
+
+
+
+DELIMITER //
+CREATE PROCEDURE GetInstructions(IN thisrecipenum int)
+BEGIN
+SELECT recipename, instructionnum, instructions FROM instructions where recipenum=thisrecipenum;
+END //
+DELIMITER ;
+
+
+CALL GetInstructions(1);
+
+
+/*Search for Recipe*/
+DELIMITER //
+CREATE PROCEDURE GetRecipe(IN search varchar(200))
+BEGIN
+SELECT * FROM recipes WHERE recipename LIKE '%' + search + '%';
+END //
+DELIMITER ;
+
+
+CALL GetRecipe('soup');
+
+
+/*Search for User*/
+DELIMITER //
+CREATE PROCEDURE GetUser(IN user_name varchar(50))
+BEGIN
+SELECT useraccnum, username, gender, firstname, lastname FROM useraccounts WHERE username = user_name;
+END //
+DELIMITER ;
+
+
+CALL GetUser('TestUsername');
+
+
+/*Other Queries*/
+/*Select Users under 20*/
+SELECT useraccnum, firstname, lastname FROM useraccounts WHERE age < 20;
+
+
+/*Select all vegetarian profiles*/
+SELECT useraccnum, username FROM profiles WHERE eatertype = 'vegetarian';
+
+/*Select all details for non-vegetarian profiles*/
+SELECT * FROM profiles WHERE useraccnum not in (SELECT useraccnum, username FROM profiles WHERE eatertype = 'vegetarian' as r1);
 
 
 
