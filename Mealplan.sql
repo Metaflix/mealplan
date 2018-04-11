@@ -13,12 +13,11 @@ create table IF NOT EXISTS useraccounts(
     gender varchar(10) not null,  
     city varchar(100) not null,
     country varchar(30) not null, 
-    primary key (useraccnum, username) 
+    primary key (useraccnum) 
 
 ); 
 ALTER TABLE useraccounts CHANGE COLUMN age  age int(10) NULL;
-ALTER TABLE useraccounts CHANGE COLUMN dob  dob varchar(30);
-ALTER TABLE useraccounts DROP dateofbirth;
+
 
 create table IF NOT EXISTS profiles( 
     useraccnum int auto_increment not null,
@@ -89,7 +88,7 @@ INSERT INTO `useraccounts` (`useraccnum`,`username`,`firstname`,`lastname`,`dob`
 INSERT INTO `useraccounts` (`useraccnum`,`username`,`firstname`,`lastname`,`dob`,`email`,`phone`,`gender`,`city`,`country`) VALUES (5,"T3F1G9","Erich","Rodgers","06/19/93","mauris.Integer.sem@Vivamusmolestie.co.uk","1-881-833-8727","Male","Amravati","Serbia");
 INSERT INTO `useraccounts` (`useraccnum`,`username`,`firstname`,`lastname`,`dob`,`email`,`phone`,`gender`,`city`,`country`) VALUES (6,"U2J7A1","Gabriel","Armstrong","01/24/86","semper.erat@at.org","1-992-904-7398","Male","Corby","Djibouti");
 INSERT INTO `useraccounts` (`useraccnum`,`username`,`firstname`,`lastname`,`dob`,`email`,`phone`,`gender`,`city`,`country`) VALUES (7,"M1C6Q6","Lev","Monroe","06/23/84","molestie.dapibus@tellusNunclectus.org","1-820-139-5295","Male","Ottawa","Holy See (Vatican City State)";
-INSERT INTO `useraccounts` (`useraccnum`,`username`,`firstname`,`lastname`,`dob`,`email`,`phone`,`gender`,`city`,`country`) VALUES (8,"G7S1M4","Jin","Conner","08/27/95","orci.adipiscing.non@acarcuNunc.net","1-211-186-3403","Male","Baiso","Congo (Brazzaville)";
+#INSERT INTO `useraccounts` (`useraccnum`,`username`,`firstname`,`lastname`,`dob`,`email`,`phone`,`gender`,`city`,`country`) VALUES (8,"G7S1M4","Jin","Conner","08/27/95","orci.adipiscing.non@acarcuNunc.net","1-211-186-3403","Male","Baiso","Congo (Brazzaville)";
 INSERT INTO `useraccounts` (`useraccnum`,`username`,`firstname`,`lastname`,`dob`,`email`,`phone`,`gender`,`city`,`country`) VALUES (9,"I7X9K1","Gregory","Whitaker","10/28/01","habitant@facilisisfacilisismagna.edu","1-614-444-7754","Male","Bersillies-l'Abbaye","Micronesia";
 INSERT INTO `useraccounts` (`useraccnum`,`username`,`firstname`,`lastname`,`dob`,`email`,`phone`,`gender`,`city`,`country`) VALUES (10,"M3J6S3","Timon","Daugherty","11/11/85","vulputate.posuere.vulputate@duiaugueeu.com","1-680-504-7068","Male","Macduff","Paraguay");
 INSERT INTO `useraccounts` (`useraccnum`,`username`,`firstname`,`lastname`,`dob`,`email`,`phone`,`gender`,`city`,`country`) VALUES (11,"Y7M5U3","Keith","Flores","06/24/02","mollis.non.cursus@liberoduinec.com","1-133-303-1286","Male","Amritsar","Tokelau");
