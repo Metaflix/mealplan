@@ -11,7 +11,7 @@ create table useraccounts(
     email varchar (50) not null,  
     phone varchar (30) not null,
     gender varchar (10) not null,  
-    city varchar (100) not null
+    city varchar (100) not null,
     country varchar (30) not null, 
     primary key (useraccnum, username) 
 ); 
@@ -24,9 +24,9 @@ create table profiles(
     primaryfoodchoice enum ("fruits", "vegetables", "dairy", "meats", "grains"),  
     secondaryfoodchoice enum ("fruits", "vegetables", "dairy", "meats", "grains"), 
     tertiaryfoodchoice enum ("fruits", "vegetables", "dairy", "meats", "grains"), 
-    primary key (useraccnum, username), 
-    foreign key (useraccnum) references useraccounts (useraccnum) on delete cascade
-    foreign key(username) references useraccounts (username) on delete cascade
+    primary key (useraccnum), 
+    #foreign key (useraccnum) references useraccounts (useraccnum) on delete cascade,
+    #foreign key(username) references useraccounts (username) on delete cascade
     );  
     
 create table recipes( 
