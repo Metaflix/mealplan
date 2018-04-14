@@ -9,15 +9,15 @@ from app import app
 from flask import render_template, request, redirect, url_for
 from flask.ext.mysqldb import MySQL
 import smtplib
-=======
+
 from app import app, db
 from flask import render_template, request, redirect, url_for, jsonify, session
 from forms import *
 from models import *
-from image_scrapper import scrape
+
 
 db.create_all()
->>>>>>> 22f90f8c0eae767696850f9b9b79006791cb42b5
+
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'metaflix'
@@ -38,17 +38,10 @@ def home():
 def about():
     """Render the website's about page."""
     return render_template('about.html', name="Mary Jane")
-<<<<<<< HEAD
-    
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    form = ContactForm()
-=======
 
 #######################    FUNCTIONALITIES    ###########################
 @app.route('/api/users/register',  methods =['GET', 'POST'])
 def register(): 
->>>>>>> 22f90f8c0eae767696850f9b9b79006791cb42b5
     if request.method == 'POST':
         data = request.get_json()
         if not User.query.filter_by(email=data['email']).first():
