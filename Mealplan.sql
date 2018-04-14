@@ -19,6 +19,10 @@ create table useraccounts(
 <<<<<<< HEAD
 =======
 ALTER TABLE useraccounts CHANGE COLUMN age  age int(10) NULL;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8ba3eacfd90e541293ed9e5736d866bac23b934d
 
 >>>>>>> 8ba3eacfd90e541293ed9e5736d866bac23b934d
 
