@@ -116,12 +116,13 @@ recipename varchar(200) not null,
     
 
 
-
 /*Stored Proceedures*/
+
+/*Get All Recipes*/
 DELIMITER //
 CREATE PROCEDURE GetAllRecipes()
 BEGIN
-SELECT recipenum, recipename, recipetype FROM recipes;
+SELECT recipenum, recipename FROM recipes;
 END //
 DELIMITER ;
 
@@ -129,16 +130,17 @@ DELIMITER ;
 CALL GetAllRecipes();
 
 
-
+/*Get instructions*/
 DELIMITER //
 CREATE PROCEDURE GetInstructions(IN thisrecipenum int)
 BEGIN
-SELECT recipename, instructionnum, instructions FROM instructions where recipenum=thisrecipenum;
+SELECT recipename, insid, instructions FROM (SELECT * FROM instructions JOIN recipes WHERE insno = recipenum as r1) WHERE recipenum=thisrecipenum;
 END //
 DELIMITER ;
 
 
 CALL GetInstructions(1);
+
 
 
 /*Search for Recipe*/
@@ -153,11 +155,12 @@ DELIMITER ;
 CALL GetRecipe('soup');
 
 
+
 /*Search for User*/
 DELIMITER //
 CREATE PROCEDURE GetUser(IN user_name varchar(50))
 BEGIN
-SELECT useraccnum, username, gender, firstname, lastname FROM useraccounts WHERE username = user_name;
+SELECT u.id, u.name FROM useraccounts WHERE u.name = user_name;
 END //
 DELIMITER ;
 
@@ -166,15 +169,14 @@ CALL GetUser('TestUsername');
 
 
 /*Other Queries*/
-/*Select Users under 20*/
-SELECT useraccnum, firstname, lastname FROM useraccounts WHERE age < 20;
-
+/*Select Profiles of users under 20 years of age*/
+SELECT u.id, p.id, u.name FROM profiles WHERE age < 20;
 
 /*Select all vegetarian profiles*/
-SELECT useraccnum, username FROM profiles WHERE eatertype = 'vegetarian';
+SELECT u.id, p.id, u.name FROM profiles WHERE p.eatertype = 'vegetarian';
 
 /*Select all details for non-vegetarian profiles*/
-SELECT * FROM profiles WHERE useraccnum not in (SELECT useraccnum, username FROM profiles WHERE eatertype = 'vegetarian' as r1);
+SELECT * FROM profiles WHERE u.id not in (SELECT u.id, p.id, u.name FROM profiles WHERE p.eatertype = 'vegetarian' as r1);
 
 
 
