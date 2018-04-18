@@ -1,7 +1,6 @@
-from sqlalchemy import Column, Integer, String
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import relationship
-from app import db
+
+from flask import db
+from flask.ext.login import UserMixin
 
 
 class Item(db.Model):

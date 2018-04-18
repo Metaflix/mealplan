@@ -4,19 +4,22 @@ Jinja2 Documentation:    http://jinja.pocoo.org/2/documentation/
 Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
-
+from __future__ import print_function
 from app import app
 from flask import render_template, request, redirect, url_for
-from flask.ext.mysqldb import MySQL
+from flaskext.mysql import MySQL  
 import smtplib
+import sys
 
-from app import app, db
+
+
 from flask import render_template, request, redirect, url_for, jsonify, session
 from forms import *
 from models import *
+import flask.ext.login as FL
 
 
-db.create_all()
+
 
 
 app.config['MYSQL_HOST'] = 'localhost'
@@ -29,33 +32,62 @@ mysql = MySQL(app)
 # Routing for your application.
 ###
 
-@app.route('/api/users/home')
+def exec_sql_file(cursor, sql_file):
+    print ("\n[INFO] Executing SQL script file: '%s'" % (sql_file))
+    statement = ""
+
+    for line in open(sql_file):
+        if re.match(r'--', line):  # ignore sql comment lines
+            continue
+        if not re.search(r'[^-;]+;', line):  # keep appending lines that don't end in ';'
+            statement = statement + line
+        else:  # when you get a line ending in ';' then exec statement and reset for next statement
+            statement = statement + line
+            #print "\n\n[DEBUG] Executing SQL statement:\n%s" % (statement)
+            try:
+                cursor.execute(statement)
+            except (OperationalError, ProgrammingError) as e:
+                print ("\n[WARN] MySQLError during execute statement \n\tArgs: '%s'" % (str(e.args)))
+
+            statement = ""
+
+@app.route('/home')
 def home():
     """Render website's home page."""
     return render_template('home.html')
 
-@app.route('/about/')
+@app.route('/templates/about')
 def about():
     """Render the website's about page."""
     return render_template('about.html', name="Mary Jane")
 
 #######################    FUNCTIONALITIES    ###########################
-@app.route('/api/users/register',  methods =['GET', 'POST'])
+@app.route('/templates/register',  methods =['GET', 'POST'])
 def register(): 
-    if request.method == 'POST':
-        data = request.get_json()
-        if not User.query.filter_by(email=data['email']).first():
-            user = User(name=data['name'], email=data['email'], password=data['password'], 
-                        age=data['age'], gender=data['gender'])
-            db.session.add(user)
-            db.session.commit()
-            return jsonify(data = user.serialize())
-        else:
-            return jsonify(error="User already exists")
-    else:
-        return render_template('register.html')
+     
+  if request.method=='POST':
+    first_name=request.form['fname']
+    last_name=request.form['lname']
+    username=request.form['username']
+    
+    cursor = db.cursor()
+    cursor.execute("""INSERT INTO names_tbl(username,password) \ VALUES (%s,%s) """,(username,password))
+    exec_sql_file(cursor, "/database-project/Mealplan_data.sql")
+    cursor.close()
+    print('Successfully Registered', file=sys.stdout)
+    
+    return render_template("register.html") 
 
 
+
+
+
+
+
+
+
+
+"""
 @app.route('/api/users/login', methods=['GET','POST'])
 def login():
     if request.method == 'POST':
@@ -72,30 +104,14 @@ def login():
 def addItem():
     if session.has_key('email'):
         return render_template('new_item.html')
-    return render_template('login.html')
+        return render_template('login.html')
 
-            return jsonify(error="User already exists")
+        return jsonify(error="User already exists")
     else:
         return render_template('register.html')
 
 
-@app.route('/api/users/login', methods=['GET','POST'])
-def login():
-    if request.method == 'POST':
-        data = request.get_json()
-        user = User(email= data['email'], password = data['password'])
-        if user.validate():
-            session['email'] = user.email
-            return jsonify(status = "Success")
-        return jsonify(error = "User not found")
-    else:
-        return render_template('login.html')
-
 @app.route('/api/users/new_item', methods=['GET'])
-def addItem():
-    if session.has_key('email'):
-        return render_template('new_item.html')
-    return render_template('login.html')
 
 @app.route('/api/users/<int:userid>/wishlist', methods=['GET','POST'])
 def wishlist(userid):
@@ -153,10 +169,11 @@ def getUserInfo():
 
 @app.route('/<file_name>.txt')
 def send_text_file(file_name):
-    """Send your static text file."""
+    # Send your static text file.
     file_dot_text = file_name + '.txt'
     return app.send_static_file(file_dot_text)
 
+"""
 
 @app.after_request
 def add_header(response):
@@ -167,6 +184,7 @@ def add_header(response):
     response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
     response.headers['Cache-Control'] = 'public, max-age=600'
     return response
+
 
 
 @app.errorhandler(404)

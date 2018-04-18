@@ -1,7 +1,9 @@
-from flask.ext.wtf import Form
+
 from wtforms.fields import StringField, PasswordField, DecimalField, FileField
 from wtforms import RadioField
 from wtforms.validators import DataRequired
+from flask_wtf import Form
+
 
 
 class RegisterForm(Form):

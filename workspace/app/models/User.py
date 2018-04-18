@@ -1,11 +1,10 @@
-from sqlalchemy import Column, Integer, String
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import relationship
-from app import db
+
+from flask import db
+from flask.ext.login import UserMixin
 
 
 class User(db.Model):
-    """Model for a User profile"""
+   # Model for a User profile
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -55,3 +54,4 @@ class User(db.Model):
 
     def get_id(self):
         return unicode(self.id) 
+        
